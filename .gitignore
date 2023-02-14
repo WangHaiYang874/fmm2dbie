@@ -10,3 +10,4 @@ make.inc
 *.sav
 /examples/proof-of-concept/*
 print_testres.txt
+.vscode/settings.json

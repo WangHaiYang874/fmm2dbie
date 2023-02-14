@@ -113,7 +113,8 @@ COBJS = $(CHUNK)/dchunkints_main.o $(CHUNK)/zchunkints_main.o
 
 # Helm wrappers
 HELM = src/helm_wrappers
-HOBJS = $(HELM)/helm_comb_dir2d.o
+HOBJS = $(HELM)/helm_comb_dir2d.o \
+	$(HELM)/helm_comb_trans2d.o
 
 # Laplace wrappers
 LAP = src/lap_wrappers

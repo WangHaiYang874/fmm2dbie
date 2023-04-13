@@ -1,6 +1,6 @@
       subroutine pd_helm2d(zk, nch, norders, ixys, 
-     1     npts, srccoefs, srcvals, adjs, dmat, smat)
-cf2py intent(in) zk, nch, norders, ixys, npts, srccoefs, srcvals, adjs
+     1     npts, srcvals, adjs, dmat, smat)
+cf2py intent(in) zk, nch, norders, ixys, npts, srcvals, adjs
 cf2py intent(out) dmat 
 cf2py intent(out) smat
 
@@ -11,7 +11,7 @@ cf2py intent(out) smat
     ! input parameters
       integer *8, intent(in) :: nch, npts, norders(nch)
       integer *8, intent(in) :: ixys(nch+1), adjs(2,nch)
-      real    *8, intent(in) :: srccoefs(6,npts), srcvals(8,npts)
+      real    *8, intent(in) :: srcvals(8,npts)
       complex*16, intent(in) :: zk
       
       ! output parameters
@@ -26,11 +26,29 @@ cf2py intent(out) smat
       integer*8, allocatable :: ipars(:)
       procedure (), pointer :: fker
       external h2d_slp, h2d_dlp
-      integer *8 :: i
+      integer *8 :: i, itype, k
+      real    *8 :: srccoefs(6,npts) 
+      real    *8 :: ds(npts), alpha, beta
+      real    *8, allocatable :: xs(:), ys(:), u(:,:), v(:,:), ws(:)
 
+      alpha = 1.0d0
+      beta  = 0.0d0
+      itype = 2
+      k = norders(1)
 
+      allocate(xs(k), ys(k), u(k,k))
+      allocate(v(k,k), ws(k))
+
+      call legeexps(itype,k, xs, ys, u, v, ws)
+
+      ds = sqrt((srcvals(3,:)**2 + srcvals(4,:)**2))
+      ! computing srccoefs 
+        
+      do i = 1, nch
+        call dgemm('n','t',6,k,k, alpha, 
+     1    srcvals(1,ixys(i)),8,u,k,beta,srccoefs(1,ixys(i)),6)
+      enddo
       
-      ier = 0
       do i = 1, nch
         iptype(i) = 1
       enddo

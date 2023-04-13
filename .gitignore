@@ -7,3 +7,6 @@ fort.*
 *.so
 make.inc
 *~
+.vscode/settings.json
+python/*.egg-info/*
+python/build/*

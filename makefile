@@ -263,6 +263,12 @@ mex:  $(STATICLIB)
 	$(MWRAP) $(MWFLAGS) -mex $(GATEWAY) -c $(GATEWAY).c $(MWRAPFILE).mw;\
 	$(MEX) $(GATEWAY).c ../lib-static/$(STATICLIB) $(MFLAGS) -output $(MWRAPFILE) $(MEXLIBS); \
 
+
+python: $(STATICLIB)
+	cd python && export FMMBIE_LIBS='$(LIBS)' && pip install -e .
+
+
+
 #
 # housekeeping routines
 #

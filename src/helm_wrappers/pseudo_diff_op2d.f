@@ -9,15 +9,13 @@ cf2py intent(out) smat
 
       implicit none
     ! input parameters
-      integer *8 :: nch, npts, norders(nch)
-      integer *8 :: ixys(nch+1), adjs(2,nch)
-      real *8    :: srccoefs(6,npts), srcvals(8,npts)
-      complex *16:: zk
-
-      
+      integer *8, intent(in) :: nch, npts, norders(nch)
+      integer *8, intent(in) :: ixys(nch+1), adjs(2,nch)
+      real    *8, intent(in) :: srccoefs(6,npts), srcvals(8,npts)
+      complex*16, intent(in) :: zk
       
       ! output parameters
-      complex *16 :: dmat(npts,npts), smat(npts,npts)
+      complex*16, allocatable, intent(out):: dmat(:,:), smat(:,:)
 
 
     ! intermediate parameters
@@ -45,6 +43,7 @@ cf2py intent(out) smat
       ndd = 0
       ndi = 0
       allocate(zpars(ndz), dpars(ndd), ipars(ndi))
+      allocate(dmat(npts,npts), smat(npts,npts))
       zpars(1) = zk
       fker => h2d_slp
       call zchunk_matbuild_ggq(nch,norders,ixys,iptype,
